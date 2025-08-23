@@ -11,6 +11,7 @@ def get_total_sales(filters):
     sql = f"""
         SELECT COALESCE(SUM(od.sales), 0)
         FROM order_details od
+        JOIN orders o ON od.order_id = o.id
         {filters['joins']}
         {filters['where']}
     """
@@ -25,7 +26,7 @@ def get_sales_by_segment(filters):
         JOIN orders o ON od.order_id = o.id
         JOIN customers cu ON o.customer_id = cu.id
         JOIN segments s ON cu.segment_id = s.id
-        {filters['joins'].replace("JOIN orders o ON od.order_id = o.id","")} 
+        {filters['joins']} 
         {filters['where']}
         GROUP BY s.name
         ORDER BY total_sales DESC
@@ -43,7 +44,6 @@ def get_top_customers(filters, limit=10):
         JOIN locations loc ON o.location_id = loc.id
         JOIN states st ON loc.state_id = st.id
         {filters['joins']    
-          .replace("JOIN orders o ON od.order_id = o.id", "")
           .replace("JOIN locations loc ON o.location_id = loc.id", "")
           .replace("JOIN states st ON loc.state_id = st.id", "")
         }
@@ -58,3 +58,4 @@ def get_top_customers(filters, limit=10):
         {"customer": r[0], "segment": r[1], "city": r[2], "state": r[3], "total_sales": float(r[4])}
         for r in rows
     ]
+

@@ -22,9 +22,7 @@ def build_sql_filters(request) -> Dict[str, Any]:
     state_ids = list(map(int, query.getlist("state_id")))
     city_names = query.getlist("city")
 
-    join_clauses: List[str] = [
-        "JOIN orders o ON od.order_id = o.id"
-    ]
+    join_clauses: List[str] = []
     
     where_clauses: List[str] = []
     param_values: List[Any] = []
