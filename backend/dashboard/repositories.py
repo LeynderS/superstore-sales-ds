@@ -97,3 +97,23 @@ def get_sales_over_time(filters):
         ORDER BY o.order_date
     """
     return [{"date": str(r[0]), "total_sales": float(r[1])} for r in fetchall(sql, filters["params"])]
+  
+# Obtener las ventas por categoría
+def get_sales_by_category(filters):
+    sql = f"""
+        SELECT c.name, SUM(od.sales) AS total_sales
+        FROM order_details od
+        JOIN products p ON od.product_id = p.id
+        JOIN sub_categories sc ON p.sub_category_id = sc.id
+        JOIN categories c ON sc.category_id = c.id
+        JOIN orders o ON od.order_id = o.id
+        {filters['joins']
+          .replace("JOIN products p ON od.product_id = p.id","")
+          .replace("JOIN sub_categories sc ON p.sub_category_id = sc.id","")
+          .replace("JOIN categories c ON sc.category_id = c.id","")
+        }
+        {filters['where']}
+        GROUP BY c.name
+        ORDER BY total_sales DESC
+    """
+    return [{"category": r[0], "total_sales": float(r[1])} for r in fetchall(sql, filters["params"])]

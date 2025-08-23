@@ -12,4 +12,5 @@ urlpatterns = [
 
   #Gráficos
   path("charts/sales-over-time", views.sales_over_time_view),
+  path("charts/sales-by-category", views.sales_by_category_view),
 ]
