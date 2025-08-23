@@ -8,6 +8,10 @@ from .repositories import (
   get_sales_over_time,
   get_sales_by_category,
 )
+from .filters import (
+  get_categories_with_subcategories,
+  get_states_with_cities
+)
 
 # Vista para obtener las ventas totales
 def total_sales_view(request):
@@ -40,3 +44,12 @@ def sales_over_time_view(request):
 def sales_by_category_view(request):
     filters = build_filters(request)
     return JsonResponse(get_sales_by_category(filters), safe=False)
+  
+#------FILTROS-------#
+def filters_init_view(request):
+    categories = get_categories_with_subcategories()
+    states = get_states_with_cities()
+    return JsonResponse({
+        "categories": categories,
+        "states": states,
+    }, safe=False)
