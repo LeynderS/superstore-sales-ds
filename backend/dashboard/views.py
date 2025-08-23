@@ -5,6 +5,7 @@ from .repositories import (
   get_sales_by_segment,
   get_top_customers,
   get_top_products,
+  get_sales_over_time,
 )
 
 # Vista para obtener las ventas totales
@@ -23,7 +24,13 @@ def top_customers_view(request):
     limit = int(request.GET.get("limit", 10))
     return JsonResponse(get_top_customers(filters, limit), safe=False)
   
+# Vista para obtener los productos top
 def top_products_view(request):
     filters = build_filters(request)
     limit = int(request.GET.get("limit", 20))
     return JsonResponse(get_top_products(filters, limit), safe=False)
+  
+# Vista para obtener las ventas a lo largo del tiempo
+def sales_over_time_view(request):
+    filters = build_filters(request)
+    return JsonResponse(get_sales_over_time(filters), safe=False)

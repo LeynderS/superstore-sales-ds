@@ -84,3 +84,16 @@ def get_top_products(filters, limit=20):
         {"product_id": r[0], "category": r[1], "sub_category": r[2], "product_name": r[3], "total_sales": float(r[4])}
         for r in rows
     ]
+
+# Obtener las ventas a lo largo del tiempo
+def get_sales_over_time(filters):
+    sql = f"""
+        SELECT o.order_date, SUM(od.sales) AS total_sales
+        FROM order_details od
+        JOIN orders o ON od.order_id = o.id
+        {filters['joins']}
+        {filters['where']}
+        GROUP BY o.order_date
+        ORDER BY o.order_date
+    """
+    return [{"date": str(r[0]), "total_sales": float(r[1])} for r in fetchall(sql, filters["params"])]
