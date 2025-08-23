@@ -59,3 +59,28 @@ def get_top_customers(filters, limit=10):
         for r in rows
     ]
 
+# Obtener los 20 productos top en ventas
+def get_top_products(filters, limit=20):
+    sql = f"""
+        SELECT p.id, c.name AS category, sc.name AS sub_category, p.name AS product_name, SUM(od.sales) AS total_sales
+        FROM order_details od
+        JOIN products p ON od.product_id = p.id
+        JOIN sub_categories sc ON p.sub_category_id = sc.id
+        JOIN categories c ON sc.category_id = c.id
+        JOIN orders o ON od.order_id = o.id
+        {filters['joins']
+          .replace("JOIN products p ON od.product_id = p.id", "")
+          .replace("JOIN sub_categories sc ON p.sub_category_id = sc.id", "")
+          .replace("JOIN categories c ON sc.category_id = c.id", "")
+        }
+        {filters['where']}
+        GROUP BY p.id, c.name, sc.name, p.name
+        ORDER BY total_sales DESC
+        LIMIT %s
+    """
+    params = filters["params"] + [limit]
+    rows = fetchall(sql, params)
+    return [
+        {"product_id": r[0], "category": r[1], "sub_category": r[2], "product_name": r[3], "total_sales": float(r[4])}
+        for r in rows
+    ]

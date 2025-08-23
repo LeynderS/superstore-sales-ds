@@ -8,4 +8,5 @@ urlpatterns = [
 
   #Tablas
   path("tables/top-customers", views.top_customers_view),
+  path("tables/top-products", views.top_products_view),
 ]
