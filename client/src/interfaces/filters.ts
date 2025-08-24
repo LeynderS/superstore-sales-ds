@@ -1,3 +1,5 @@
+import { type DashboardData } from "./dashboard";
+
 export interface Subcategory {
   id: number;
   name: string;
@@ -20,6 +22,8 @@ export interface State {
 }
 
 export interface InitialFilters {
+  start_date_range: string;
+  end_date_range: string;
   categories: Category[];
   states: State[];
 }
@@ -40,4 +44,8 @@ export interface FiltersContextType {
   setSelectedFilters: React.Dispatch<React.SetStateAction<SelectedFilters>>;
   loading: boolean;
   error: string | null;
+  dashboardData: DashboardData | null;
+  dashboardLoading: boolean;
+  dashboardError: string | null;
+  fetchDashboardData: (filters: SelectedFilters) => Promise<void>;
 }

@@ -3,6 +3,7 @@ import Select from "react-select";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { useFilterOptions } from "../hooks/useFilteredOptions";
+import { useFilters } from "../hooks/useFilters";
 
 const Filters: React.FC = () => {
   const {
@@ -20,7 +21,7 @@ const Filters: React.FC = () => {
     handleStartDateChange,
     handleEndDateChange,
   } = useFilterOptions();
-
+  const { fetchDashboardData } = useFilters();
   // Renderizado condicional fuera de los hooks
   if (loading) {
     return <p>Cargando filtros...</p>;
@@ -29,6 +30,9 @@ const Filters: React.FC = () => {
   if (!initialFilters) {
     return <p>Error: No se pudieron cargar los filtros iniciales.</p>;
   }
+
+  const minDate = new Date(initialFilters.start_date_range);
+  const maxDate = new Date(initialFilters.end_date_range);
 
   return (
     <div className="bg-white p-4 rounded-lg shadow-md mb-6">
@@ -49,6 +53,8 @@ const Filters: React.FC = () => {
             dateFormat="yyyy-MM-dd"
             className="w-full p-2 border rounded"
             placeholderText="Selecciona fecha inicio"
+            minDate={minDate}
+            maxDate={maxDate}
           />
         </div>
         <div>
@@ -65,6 +71,8 @@ const Filters: React.FC = () => {
             dateFormat="yyyy-MM-dd"
             className="w-full p-2 border rounded"
             placeholderText="Selecciona fecha fin"
+            minDate={minDate}
+            maxDate={maxDate}
           />
         </div>
         {/* Categorías */}
@@ -125,7 +133,7 @@ const Filters: React.FC = () => {
         <div className="col-span-full flex justify-end">
           <button
             className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
-            // onClick={applyFilters}
+            onClick={() => fetchDashboardData(selectedFilters)}
           >
             Aplicar Filtros
           </button>
