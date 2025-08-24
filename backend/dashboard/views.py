@@ -10,7 +10,8 @@ from .repositories import (
 )
 from .filters import (
   get_categories_with_subcategories,
-  get_states_with_cities
+  get_states_with_cities,
+  get_date_orders_range
 )
 
 # # Vista para obtener las ventas totales
@@ -69,7 +70,10 @@ def dashboard_data_view(request):
 def filters_init_view(request):
     categories = get_categories_with_subcategories()
     states = get_states_with_cities()
+    date_range = get_date_orders_range()
     return JsonResponse({
+        "start_date_range": date_range["start_date"],
+        "end_date_range": date_range["end_date"],
         "categories": categories,
         "states": states,
     }, safe=False)

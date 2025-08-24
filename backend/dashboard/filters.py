@@ -32,3 +32,8 @@ def get_states_with_cities():
         if city:
             states[s_id]["cities"].append({"name": city})
     return list(states.values())
+
+def get_date_orders_range():
+    sql = "SELECT MIN(order_date), MAX(order_date) FROM orders"
+    rows = fetchall(sql)
+    return {"start_date": rows[0][0], "end_date": rows[0][1]}
