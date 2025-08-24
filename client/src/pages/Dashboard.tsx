@@ -4,6 +4,8 @@ import TotalSales from "../components/indicators/TotalSales";
 import SalesBySegmentUI from "../components/indicators/SalesBySegment";
 import TopCustomersTable from "../components/tables/TopCustomerTable";
 import TopProductsTable from "../components/tables/TopProductsTable";
+import SalesOverTimeChart from "../components/charts/SalesOverTimeChart";
+import SalesByCategoryChart from "../components/charts/SalesByCategoryChart";
 import { useFilters } from "../hooks/useFilters";
 
 const Dashboard: React.FC = () => {
@@ -34,6 +36,13 @@ const Dashboard: React.FC = () => {
                 customers={dashboardData.tables.top_customers}
               />
               <TopProductsTable products={dashboardData.tables.top_products} />
+            </div>
+            {/* Grid de gráficos */}
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+              <SalesOverTimeChart data={dashboardData.charts.sales_over_time} />
+              <SalesByCategoryChart
+                data={dashboardData.charts.sales_by_category}
+              />
             </div>
           </div>
         )}
