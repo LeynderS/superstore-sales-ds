@@ -115,9 +115,16 @@ export const useFilterOptions = () => {
     setSelectedFilters((prev) => ({ ...prev, cities: names }));
   };
 
+  const formatDate = (date: Date) => {
+    const y = date.getFullYear();
+    const m = String(date.getMonth() + 1).padStart(2, "0");
+    const d = String(date.getDate()).padStart(2, "0");
+    return `${y}-${m}-${d}`;
+  };
+
   // Manejar cambios en las fechas
   const handleStartDateChange = (date: Date | null) => {
-    const newStart = date ? date.toISOString().split("T")[0] : undefined;
+    const newStart = date ? formatDate(date) : undefined;
     setSelectedFilters((prev) => {
       // Asegurar que la fecha de inicio no sea posterior a la de fin
       if (newStart && prev.end_date && newStart > prev.end_date) {
@@ -128,7 +135,7 @@ export const useFilterOptions = () => {
   };
 
   const handleEndDateChange = (date: Date | null) => {
-    const newEnd = date ? date.toISOString().split("T")[0] : undefined;
+    const newEnd = date ? formatDate(date) : undefined;
     setSelectedFilters((prev) => {
       // Asegurar que la fecha de fin no sea anterior a la de inicio
       if (newEnd && prev.start_date && newEnd < prev.start_date) {
